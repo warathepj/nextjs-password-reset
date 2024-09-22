@@ -1,4 +1,4 @@
-// app/sign-up/page/
+// app/sign-up/page.tsx/
 //from app/sign-up/page/, how to session name to browser, use context
 'use client'
 
@@ -10,8 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useSelector, useDispatch } from 'react-redux';
+import { setEmail } from '@/app/redux/features/email/emailSlice';
+import Link from 'next/link';
 // import { toast } from "@/components/ui/use-toast"
-import { useAuth } from '../../context/AuthContext';
+// import { useAuth } from '../../context/AuthContext';
+// import { useName } from '../context/NameContext';
+//import { useName } from '../hooks/useName';
+//const { setName } = useName();
 
 const signUpSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -19,13 +25,14 @@ const signUpSchema = z.object({
   password: z.string().min(8, { message: 'Password must be at least 4 characters.' }),
 })
 
-const { storeName } = useAuth();
+// const { storeName } = useAuth();
 
 type SignUpValues = z.infer<typeof signUpSchema>
 
 export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
-  
+  const dispatch = useDispatch();
+  const email = useSelector((state) => state.email.value);
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -34,7 +41,33 @@ export default function SignUpForm() {
       password: '',
     },
   })
+/////////////from game id////////////
 
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault()
+  if (email) {
+    // Here you would typically send the email to your server
+    console.log("Email submitted:", email)
+    toast({
+      title: "Email Submitted",
+      description: `We've received your email: ${email}`,
+    })
+    setEmail("")
+  } else {
+    toast({
+      title: "Error",
+      description: "Please enter a valid email address",
+      variant: "destructive",
+    })
+  }
+}
+
+const handleEmailChange = (e) => {
+  dispatch(setEmail(e.target.value));
+};
+
+
+////////////////////////////
   async function onSubmit(data: SignUpValues) {
     setIsLoading(true)
     
@@ -46,7 +79,8 @@ export default function SignUpForm() {
     //   title: "Account created!",
     //   description: `Welcome, ${data.name}! Your account has been successfully created.`,
     // })
-    storeName(data.name); 
+    // setName(data.name);
+    // storeName(data.name); 
     form.reset()
   }
 
@@ -76,6 +110,7 @@ export default function SignUpForm() {
               id="email" 
               type="email" 
               placeholder="john@example.com"
+              onChange={handleEmailChange} 
               {...form.register('email')}
             />
             {form.formState.errors.email && (
@@ -95,9 +130,11 @@ export default function SignUpForm() {
           </div>
         </CardContent>
         <CardFooter>
+          <Link href="/login">
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? 'Signing up...' : 'Sign Up'}
           </Button>
+          </Link>
         </CardFooter>
       </form>
     </Card>

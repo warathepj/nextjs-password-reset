@@ -1,7 +1,6 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:2436387524.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3206298182.
-// context/AuthContext.tsx
-import { createContext, useState, useContext } from 'react';
+// GEN FROM CLAUDE
+// fixing syntax error in react context
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 interface AuthContextType {
   name: string;
@@ -10,17 +9,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: React.FC = ({ children }) => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [name, setName] = useState<string>(sessionStorage.getItem('name') || '');
 
   const storeName = (name: string) => {
     setName(name);
-    sessionStorage.setItem('name', name
-);
+    sessionStorage.setItem('name', name);
   };
 
   return (
-    <AuthContext.Provider value={{ name, storeName }}> {/* Corrected line */}
+    <AuthContext.Provider value={{ name, storeName }}> 
+    // <AuthContext.Provider> 
       {children}
     </AuthContext.Provider>
   );

@@ -2,9 +2,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { NameProvider } from './context/NameContext';
+// import { NameProvider } from './providers'
 // import { ToastProvider } from "@/components/ui/toast"
+import { Providers } from '@/components/providers';
 import Nav from "@/components/Nav";
-import { AuthProvider } from './context/AuthContext';
+// import { AuthProvider } from '../context/AuthContext';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,9 +39,14 @@ export default function RootLayout({
         {/* <ToastProvider>
       <Component {...pageProps} />
     </ToastProvider> */}
-    <AuthProvider>{children}
+    {/* <AuthProvider> */}
+    <Providers>
+    <NameProvider>
+          {children}
         <Nav/>
-    </AuthProvider>
+        </NameProvider>
+        </Providers>
+    {/* </AuthProvider> */}
       </body>
     </html>
   );

@@ -1,12 +1,15 @@
-import { useAuth } from '../context/AuthContext';
-const Dashboard = () => {
-  const { name } = useAuth();
+// app/dashboard/page.tsx
+'use client'
 
+import { useName } from '../context/NameContext'
+
+export default function Dashboard() {
+  const { name } = useName();
+  
   return (
-    <div>Dashboard
-        {name ? <p>Hello, {name}!</p> : <p>Please sign up</p>}
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome, {name}!</p>
     </div>
   )
 }
-
-export default Dashboard
